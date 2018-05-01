@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
+import { Link } from 'react-router-dom';
 
 interface BloodWorkListState {
     bloodWorks: BloodWork[];
@@ -45,6 +46,13 @@ export class BloodWorkList extends React.Component<RouteComponentProps<{}>, Bloo
                         <td>{bloodWork.dateCreated}</td>
                         <td>{bloodWork.examDate}</td>
                         <td>{bloodWork.description}</td>
+                        <td>
+                            <Link to={"/form/" + bloodWork.idBloodWorks}>
+                                <button style={{ display: 'block', height: '100%' }}>
+                                    Edit
+                                </button>
+                            </Link>
+                        </td>
                     </tr>
                 )}
             </tbody>

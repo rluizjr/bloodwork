@@ -2,15 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BloodWorks.Models
 {
     public class BloodWork
     {
+        [Key]
+        [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdBloodWorks { get; set; }
+
+        [Display(Name = "Created Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime DateCreated { get; set; }
+
+        [Display(Name = "Exam Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime ExamDate { get; set; }
+
+        [Display(Name = "Results Date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime ResultsDate { get; set; }
+
+        [StringLength(100, MinimumLength = 3)]
         public string Description { get; set; }
         public Double Hemoglobin { get; set; }
         public Double Hematocrit { get; set; }

@@ -22,7 +22,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
             fetch('api/BloodWorks/' + parameters.id)
                 .then(response => response.json() as Promise<BloodWork>)
                 .then(data => {
-                    this.setState({ bloodWork: data, loading: false });
+                    this.setState({ bloodWork: data, loading: false, insert: false });
                 });
         } else if (this.state.loading) {
             this.setState({ bloodWork: null, loading: false, insert: true });
@@ -118,7 +118,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>MCHC</label>
                             </td>
                             <td>
-                                <input id='' name='' type='' defaultValue={bloodWork == null ? '' : bloodWork.mchc.toString()} />
+                                <input id='MCHC' name='MCHC' type='text' defaultValue={bloodWork == null ? '' : bloodWork.mchc.toString()} />
                             </td>
                         </tr>
                         <tr>
@@ -126,7 +126,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>RDW</label>
                             </td>
                             <td>
-                                <input id='MCHC' name='MCHC' type='text' defaultValue={bloodWork == null ? '' : bloodWork.rdw.toString()} />
+                                <input id='RDW' name='RDW' type='text' defaultValue={bloodWork == null ? '' : bloodWork.rdw.toString()} />
                             </td>
                         </tr>
                         <tr>
@@ -134,7 +134,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Platelet Count</label>
                             </td>
                             <td>
-                                <input id='PlateletCount' name='PlateletCount' type='text' defaultValue={bloodWork == null ? '' : bloodWork.plateletCount.toString()} />
+                                <input id='plateletCount' name='plateletCount' type='text' defaultValue={bloodWork == null ? '' : bloodWork.plateletCount.toString()} />
                             </td>
                         </tr>
                     </tbody>
@@ -149,26 +149,26 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
         const form = new FormData(event.target);
         const bloodWork = this.formToJson(form);
 
-        debugger;
+        const id = this.state.insert ? "" : bloodWork.idBloodWorks.toString();
+        const method = this.state.insert ? "POST" : "PUT";
 
-        fetch('api/BloodWorks/', {
-            method: "POST",
+        fetch('api/BloodWorks/' + id, {
+            method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(bloodWork)
         })
             .then(response => {
-                debugger;
                 response.json().then(data => {
-                    this.setState({ bloodWork: data, loading: false });
+                    this.setState({ bloodWork: data, loading: false, insert: this.state.insert });
                 })
-                //console.log(data);
-                //this.setState({ bloodWork: JSON.parse(data.body), loading: false });
             });
     }
 
     formToJson(data: FormData) {
+        let parameters = this.props.match.params as params;
+
         let bloodWork: BloodWork = {
-            idBloodWorks : 0,
+            idBloodWorks: this.state.insert ? 0 : +parameters.id,
             dateCreated: new Date(data.get('dateCreated') as string),
             examDate: new Date(data.get('examDate') as string),
             resultsDate: new Date(data.get('resultsDate') as string),
@@ -177,9 +177,9 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
             hematocrit: +(data.get('hematocrit') as string),
             whiteBloodCellCount: +(data.get('whiteBloodCellCount') as string),
             redBloodCellCount: +(data.get('redBloodCellCount') as string),
-            mcv: +(data.get('mcv') as string),
-            mchc: +(data.get('mchc') as string),
-            rdw: +(data.get('rdw') as string),
+            mcv: +(data.get('MCV') as string),
+            mchc: +(data.get('MCHC') as string),
+            rdw: +(data.get('RDW') as string),
             plateletCount: +(data.get('plateletCount') as string)
         }
         

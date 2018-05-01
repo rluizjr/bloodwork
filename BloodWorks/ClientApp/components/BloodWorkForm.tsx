@@ -11,6 +11,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
     constructor() {
         super();
         this.state = { bloodWork: null, loading: true, insert: true };
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     public render() {
@@ -37,7 +38,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
         return <div>
             <h1>Blood Work</h1>
             <p>This is a simple example of a React component.</p>
-            <form id="bloodWorkForm">
+            <form onSubmit={this.handleSubmit}>
                 <table>
                     <tbody>
                         <tr>
@@ -138,22 +139,51 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                         </tr>
                     </tbody>
                 </table>
-                <button onClick={() => { this.save(bloodWork == null ? '' : bloodWork.idBloodWorks.toString()) }}>Save</button>
+                <button>Save</button>
             </form>
         </div>;
     }
 
-    save(id: string) {
-        let form = document.querySelector('#bloodWorkForm');
+    handleSubmit(event: any) {
+        event.preventDefault();
+        const form = new FormData(event.target);
+        const bloodWork = this.formToJson(form);
 
-        fetch('api/BloodWorks/' + id, {
-            method: this.state.insert ? "POST" : "PUT",
-            body: JSON.stringify(form)
+        debugger;
+
+        fetch('api/BloodWorks/', {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(bloodWork)
         })
-            .then(response => response.json() as Promise<BloodWork>)
-            .then(data => {
-                this.setState({ bloodWork: data, loading: false });
+            .then(response => {
+                debugger;
+                response.json().then(data => {
+                    this.setState({ bloodWork: data, loading: false });
+                })
+                //console.log(data);
+                //this.setState({ bloodWork: JSON.parse(data.body), loading: false });
             });
+    }
+
+    formToJson(data: FormData) {
+        let bloodWork: BloodWork = {
+            idBloodWorks : 0,
+            dateCreated: new Date(data.get('dateCreated') as string),
+            examDate: new Date(data.get('examDate') as string),
+            resultsDate: new Date(data.get('resultsDate') as string),
+            description: data.get('description') as string,
+            hemoglobin: +(data.get('hemoglobin') as string),
+            hematocrit: +(data.get('hematocrit') as string),
+            whiteBloodCellCount: +(data.get('whiteBloodCellCount') as string),
+            redBloodCellCount: +(data.get('redBloodCellCount') as string),
+            mcv: +(data.get('mcv') as string),
+            mchc: +(data.get('mchc') as string),
+            rdw: +(data.get('rdw') as string),
+            plateletCount: +(data.get('plateletCount') as string)
+        }
+        
+        return bloodWork;
     }
 }
 

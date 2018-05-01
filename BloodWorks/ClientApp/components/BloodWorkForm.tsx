@@ -4,26 +4,27 @@ import { RouteComponentProps } from 'react-router';
 interface BloodWorkFormState {
     bloodWork: BloodWork | null;
     loading: boolean;
+    insert: boolean;
 }
 
 export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, BloodWorkFormState> {
     constructor() {
         super();
-        this.state = { bloodWork: null, loading: true };
+        this.state = { bloodWork: null, loading: true, insert: true };
     }
 
     public render() {
         let parameters = this.props.match.params as params;
 
         if (this.state.loading && parameters.id != 'new') {
-            this.state = { bloodWork: null, loading: true };
+            this.state = { bloodWork: null, loading: true, insert: false };
             fetch('api/BloodWorks/' + parameters.id)
                 .then(response => response.json() as Promise<BloodWork>)
                 .then(data => {
                     this.setState({ bloodWork: data, loading: false });
                 });
         } else if (this.state.loading) {
-            this.setState({ bloodWork: null, loading: false });
+            this.setState({ bloodWork: null, loading: false, insert: true });
         }
 
         return this.state.loading

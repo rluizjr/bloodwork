@@ -1,16 +1,17 @@
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, Redirect } from 'react-router';
 
 interface BloodWorkFormState {
     bloodWork: BloodWork | null;
     loading: boolean;
     insert: boolean;
+    redirect: boolean;
 }
 
 export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, BloodWorkFormState> {
     constructor() {
         super();
-        this.state = { bloodWork: null, loading: true, insert: true };
+        this.state = { bloodWork: null, loading: true, insert: true, redirect: false };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -18,19 +19,27 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
         let parameters = this.props.match.params as params;
 
         if (this.state.loading && parameters.id != 'new') {
-            this.state = { bloodWork: null, loading: true, insert: false };
+            this.state = { bloodWork: null, loading: true, insert: false, redirect: false };
             fetch('api/BloodWorks/' + parameters.id)
                 .then(response => response.json() as Promise<BloodWork>)
                 .then(data => {
-                    this.setState({ bloodWork: data, loading: false, insert: false });
+                    this.setState({ bloodWork: data, loading: false, insert: false, redirect: false });
                 });
         } else if (this.state.loading) {
-            this.setState({ bloodWork: null, loading: false, insert: true });
+            this.setState({ bloodWork: null, loading: false, insert: true, redirect: false });
+        }
+
+        if (this.state.redirect) {
+            return <Redirect to='/list' />;
         }
 
         return this.state.loading
             ? <p><em>Loading...</em></p>
             : this.renderForm();
+    }
+
+    formatDate(date: string) {
+        return date.substring(0, 10);
     }
 
     renderForm() {
@@ -46,7 +55,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Created Date</label>
                             </td>
                             <td>
-                                <input id='dateCreated' name='dateCreated' type='text' defaultValue={bloodWork == null ? '' : bloodWork.dateCreated.toString()} />
+                                <input id='dateCreated' name='dateCreated' type='date' defaultValue={bloodWork == null ? '' : this.formatDate(bloodWork.dateCreated.toString())} required />
                             </td>
                         </tr>
                         <tr>
@@ -54,7 +63,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Exam Date</label>
                             </td>
                             <td>
-                                <input id='examDate' name='examDate' type='text' defaultValue={bloodWork == null ? '' : bloodWork.examDate.toString()} />
+                                <input id='examDate' name='examDate' type='date' defaultValue={bloodWork == null ? '' : this.formatDate(bloodWork.examDate.toString())} required/>
                             </td>
                         </tr>
                         <tr>
@@ -62,7 +71,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Results Date</label>
                             </td>
                             <td>
-                                <input id='resultsDate' name='resultsDate' type='text' defaultValue={bloodWork == null ? '' : bloodWork.resultsDate.toString()} />
+                                <input id='resultsDate' name='resultsDate' type='date' defaultValue={bloodWork == null ? '' : this.formatDate(bloodWork.resultsDate.toString())} required/>
                             </td>
                         </tr>
                         <tr>
@@ -70,7 +79,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Description</label>
                             </td>
                             <td>
-                                <input id='description' name='description' type='text' defaultValue={bloodWork == null ? '' : bloodWork.description.toString()} />
+                                <input id='description' name='description' type='text' defaultValue={bloodWork == null ? '' : bloodWork.description.toString()} required/>
                             </td>
                         </tr>
                         <tr>
@@ -78,7 +87,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Hemoglobin</label>
                             </td>
                             <td>
-                                <input id='hemoglobin' name='hemoglobin' type='text' defaultValue={bloodWork == null ? '' : bloodWork.hemoglobin.toString()} />
+                                <input id='hemoglobin' name='hemoglobin' type='number' defaultValue={bloodWork == null ? '' : bloodWork.hemoglobin.toString()} required/>
                             </td>
                         </tr>
                         <tr>
@@ -86,7 +95,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Hematocrit</label>
                             </td>
                             <td>
-                                <input id='hematocrit' name='hematocrit' type='text' defaultValue={bloodWork == null ? '' : bloodWork.hematocrit.toString()} />
+                                <input id='hematocrit' name='hematocrit' type='number' defaultValue={bloodWork == null ? '' : bloodWork.hematocrit.toString()} required/>
                             </td>
                         </tr>
                         <tr>
@@ -94,7 +103,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>White Blood Cell Count</label>
                             </td>
                             <td>
-                                <input id='whiteBloodCellCount' name='whiteBloodCellCount' type='text' defaultValue={bloodWork == null ? '' : bloodWork.whiteBloodCellCount.toString()} />
+                                <input id='whiteBloodCellCount' name='whiteBloodCellCount' type='number' defaultValue={bloodWork == null ? '' : bloodWork.whiteBloodCellCount.toString()} required/>
                             </td>
                         </tr>
                         <tr>
@@ -102,7 +111,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Red Blood Cell Count</label>
                             </td>
                             <td>
-                                <input id='redBloodCellCount' name='redBloodCellCount' type='text' defaultValue={bloodWork == null ? '' : bloodWork.redBloodCellCount.toString()} />
+                                <input id='redBloodCellCount' name='redBloodCellCount' type='number' defaultValue={bloodWork == null ? '' : bloodWork.redBloodCellCount.toString()} required/>
                             </td>
                         </tr>
                         <tr>
@@ -110,7 +119,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>MCV</label>
                             </td>
                             <td>
-                                <input id='MCV' name='MCV' type='text' defaultValue={bloodWork == null ? '' : bloodWork.mcv.toString()} />
+                                <input id='MCV' name='MCV' type='number' defaultValue={bloodWork == null ? '' : bloodWork.mcv.toString()} required/>
                             </td>
                         </tr>
                         <tr>
@@ -118,7 +127,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>MCHC</label>
                             </td>
                             <td>
-                                <input id='MCHC' name='MCHC' type='text' defaultValue={bloodWork == null ? '' : bloodWork.mchc.toString()} />
+                                <input id='MCHC' name='MCHC' type='number' defaultValue={bloodWork == null ? '' : bloodWork.mchc.toString()} required/>
                             </td>
                         </tr>
                         <tr>
@@ -126,7 +135,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>RDW</label>
                             </td>
                             <td>
-                                <input id='RDW' name='RDW' type='text' defaultValue={bloodWork == null ? '' : bloodWork.rdw.toString()} />
+                                <input id='RDW' name='RDW' type='number' defaultValue={bloodWork == null ? '' : bloodWork.rdw.toString()} />
                             </td>
                         </tr>
                         <tr>
@@ -134,7 +143,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Platelet Count</label>
                             </td>
                             <td>
-                                <input id='plateletCount' name='plateletCount' type='text' defaultValue={bloodWork == null ? '' : bloodWork.plateletCount.toString()} />
+                                <input id='plateletCount' name='plateletCount' type='number' defaultValue={bloodWork == null ? '' : bloodWork.plateletCount.toString()} />
                             </td>
                         </tr>
                     </tbody>
@@ -159,7 +168,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
         })
             .then(response => {
                 response.json().then(data => {
-                    this.setState({ bloodWork: data, loading: false, insert: this.state.insert });
+                    this.setState({ bloodWork: data, loading: false, insert: this.state.insert, redirect: true });
                 })
             });
     }

@@ -27,7 +27,6 @@ export class BloodWorkReport extends React.Component<RouteComponentProps<{}>, Co
                 });
             
             return <div id="charts">
-                <Redirect to='/report' />;
                 <div id="hemoglobin">
                 </div>
                 <div id="hematocrit">

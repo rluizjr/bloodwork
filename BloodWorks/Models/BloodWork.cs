@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BloodWorks.Models
 {
+    //Creates model doing the required validations
     public class BloodWork
     {
         [Key]
@@ -29,7 +30,7 @@ namespace BloodWorks.Models
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime ResultsDate { get; set; }
 
-        [StringLength(100, MinimumLength = 3)]
+        [StringLength(100)]
         public string Description { get; set; }
         public Double Hemoglobin { get; set; }
         public Double Hematocrit { get; set; }

@@ -81,7 +81,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Description</label>
                             </td>
                             <td>
-                                <input id='description' name='description' type='text' minLength={3} maxLength={10} defaultValue={bloodWork == null ? '' : bloodWork.description.toString()} required />
+                                <input id='description' name='description' type='text' maxLength={100} defaultValue={bloodWork == null ? '' : bloodWork.description.toString()} required />
                             </td>
                         </tr>
                         <tr>

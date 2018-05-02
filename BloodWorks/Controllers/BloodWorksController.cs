@@ -80,7 +80,6 @@ namespace BloodWorks.Controllers
             }
 
             return CreatedAtAction("GetBloodWork", new { id = bloodWork.IdBloodWorks }, bloodWork);
-            //return NoContent();
         }
 
         // POST: api/BloodWorks

@@ -17,6 +17,7 @@ namespace BloodWorks.Data
                 return;
             }
 
+            //Creates initial data to insert in the Db
             var bloodWorks = new BloodWork[]
             {
                 new BloodWork{

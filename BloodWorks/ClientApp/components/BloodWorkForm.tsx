@@ -43,7 +43,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
         let bloodWork = this.state.bloodWork;
         return <div>
             <h1>Blood Work</h1>
-            <p>This is a simple example of a React component.</p>
+            <p>This is the form to insert and update blood works.</p>
             <form onSubmit={this.handleSubmit}>
                 <table>
                     <tbody>

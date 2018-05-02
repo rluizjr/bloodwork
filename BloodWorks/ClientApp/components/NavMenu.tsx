@@ -24,7 +24,7 @@ export class NavMenu extends React.Component<{}, {}> {
                         </li>
                         <li>
                             <NavLink to={'/form/new'} activeClassName='active'>
-                                <span className='glyphicon glyphicon-education'></span> Form
+                                <span className='glyphicon glyphicon-education'></span> Create
                             </NavLink>
                         </li>
                         <li>

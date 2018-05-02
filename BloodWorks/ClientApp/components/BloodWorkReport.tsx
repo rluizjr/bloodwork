@@ -3,7 +3,6 @@ import { RouteComponentProps, Redirect } from 'react-router';
 import * as Highcharts from "highcharts";
 import { render } from 'react-dom';
 import * as Util from '../utils/util';
-import { BloodWork } from '../utils/util';
 
 interface BloodWorkReportState {
     first: boolean;

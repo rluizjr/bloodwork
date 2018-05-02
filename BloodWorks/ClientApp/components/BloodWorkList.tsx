@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 import { Link } from 'react-router-dom';
+import * as Util from '../utils/util';
 
 interface BloodWorkListState {
-    bloodWorks: BloodWork[];
+    bloodWorks: Util.BloodWork[];
     loading: boolean;
 }
 
@@ -13,7 +14,7 @@ export class BloodWorkList extends React.Component<RouteComponentProps<{}>, Bloo
         this.state = { bloodWorks: [], loading: true };
         
         fetch('api/BloodWorks')
-            .then(response => response.json() as Promise<BloodWork[]>)
+            .then(response => response.json() as Promise<Util.BloodWork[]>)
             .then(data => {
                 this.setState({ bloodWorks: data, loading: false });
             });
@@ -31,7 +32,7 @@ export class BloodWorkList extends React.Component<RouteComponentProps<{}>, Bloo
         </div>;
     }
 
-    private static renderBloodWorksTable(bloodWorks: BloodWork[]) {
+    private static renderBloodWorksTable(bloodWorks: Util.BloodWork[]) {
         return <table className='table'>
             <thead>
                 <tr>
@@ -43,13 +44,13 @@ export class BloodWorkList extends React.Component<RouteComponentProps<{}>, Bloo
             <tbody>
                 {bloodWorks.map(bloodWork =>
                     <tr key={bloodWork.idBloodWorks}>
-                        <td>{bloodWork.dateCreated}</td>
-                        <td>{bloodWork.examDate}</td>
+                        <td>{Util.formatDate(bloodWork.dateCreated.toString())}</td>
+                        <td>{Util.formatDate(bloodWork.examDate.toString())}</td>
                         <td>{bloodWork.description}</td>
                         <td>
                             <Link to={"/form/" + bloodWork.idBloodWorks}>
                                 <button style={{ display: 'block', height: '100%' }}>
-                                    Edit
+                                    Details
                                 </button>
                             </Link>
                         </td>
@@ -58,20 +59,4 @@ export class BloodWorkList extends React.Component<RouteComponentProps<{}>, Bloo
             </tbody>
         </table>;
     }
-}
-
-interface BloodWork {
-    idBloodWorks: number;
-    dateCreated: Date;
-    examDate: Date;
-    resultsDate: Date;
-    description: string;
-    hemoglobin: number;
-    hematocrit: number;
-    whiteBloodCellCount: number;
-    redBloodCellCount: number;
-    MCV: number;
-    MCHC: number;
-    RDW: number;
-    PlateletCount: number;
 }

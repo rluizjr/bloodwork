@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { RouteComponentProps, Redirect } from 'react-router';
+import * as Util from '../utils/util';
 
 interface BloodWorkFormState {
-    bloodWork: BloodWork | null;
+    bloodWork: Util.BloodWork | null;
     loading: boolean;
     insert: boolean;
     redirect: boolean;
@@ -21,7 +22,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
         if (this.state.loading && parameters.id != 'new') {
             this.state = { bloodWork: null, loading: true, insert: false, redirect: false };
             fetch('api/BloodWorks/' + parameters.id)
-                .then(response => response.json() as Promise<BloodWork>)
+                .then(response => response.json() as Promise<Util.BloodWork>)
                 .then(data => {
                     this.setState({ bloodWork: data, loading: false, insert: false, redirect: false });
                 });
@@ -38,10 +39,6 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
             : this.renderForm();
     }
 
-    formatDate(date: string) {
-        return date.substring(0, 10);
-    }
-
     renderForm() {
         let bloodWork = this.state.bloodWork;
         return <div>
@@ -55,7 +52,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Created Date</label>
                             </td>
                             <td>
-                                <input id='dateCreated' name='dateCreated' type='date' defaultValue={bloodWork == null ? '' : this.formatDate(bloodWork.dateCreated.toString())} required />
+                                <input id='dateCreated' name='dateCreated' type='date' defaultValue={bloodWork == null ? '' : Util.formatDate(bloodWork.dateCreated.toString())} required />
                             </td>
                         </tr>
                         <tr>
@@ -63,7 +60,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Exam Date</label>
                             </td>
                             <td>
-                                <input id='examDate' name='examDate' type='date' defaultValue={bloodWork == null ? '' : this.formatDate(bloodWork.examDate.toString())} required/>
+                                <input id='examDate' name='examDate' type='date' defaultValue={bloodWork == null ? '' : Util.formatDate(bloodWork.examDate.toString())} required/>
                             </td>
                         </tr>
                         <tr>
@@ -71,7 +68,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Results Date</label>
                             </td>
                             <td>
-                                <input id='resultsDate' name='resultsDate' type='date' defaultValue={bloodWork == null ? '' : this.formatDate(bloodWork.resultsDate.toString())} required/>
+                                <input id='resultsDate' name='resultsDate' type='date' defaultValue={bloodWork == null ? '' : Util.formatDate(bloodWork.resultsDate.toString())} required/>
                             </td>
                         </tr>
                         <tr>
@@ -119,7 +116,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>MCV</label>
                             </td>
                             <td>
-                                <input id='MCV' name='MCV' type='number' defaultValue={bloodWork == null ? '' : bloodWork.mcv.toString()} required/>
+                                <input id='MCV' name='MCV' type='number' defaultValue={bloodWork == null ? '' : bloodWork.mcv.toString()} required />
                             </td>
                         </tr>
                         <tr>
@@ -176,7 +173,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
     formToJson(data: FormData) {
         let parameters = this.props.match.params as params;
 
-        let bloodWork: BloodWork = {
+        let bloodWork: Util.BloodWork = {
             idBloodWorks: this.state.insert ? 0 : +parameters.id,
             dateCreated: new Date(data.get('dateCreated') as string),
             examDate: new Date(data.get('examDate') as string),
@@ -198,20 +195,4 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
 
 interface params {
     id: string;
-}
-
-interface BloodWork {
-    idBloodWorks: number;
-    dateCreated: Date;
-    examDate: Date;
-    resultsDate: Date;
-    description: string;
-    hemoglobin: number;
-    hematocrit: number;
-    whiteBloodCellCount: number;
-    redBloodCellCount: number;
-    mcv: number;
-    mchc: number;
-    rdw: number;
-    plateletCount: number;
 }

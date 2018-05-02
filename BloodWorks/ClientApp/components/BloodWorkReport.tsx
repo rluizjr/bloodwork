@@ -5,12 +5,12 @@ import { render } from 'react-dom';
 import * as Util from '../utils/util';
 import { BloodWork } from '../utils/util';
 
-interface CounterState {
+interface BloodWorkReportState {
     first: boolean;
     bloodWorks: Util.BloodWork[] | null;
 }
 
-export class BloodWorkReport extends React.Component<RouteComponentProps<{}>, CounterState> {
+export class BloodWorkReport extends React.Component<RouteComponentProps<{}>, BloodWorkReportState> {
     constructor() {
         super();
 

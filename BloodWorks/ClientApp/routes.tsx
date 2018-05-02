@@ -5,10 +5,12 @@ import { Home } from './components/Home';
 import { BloodWorkForm } from './components/BloodWorkForm';
 import { BloodWorkList } from './components/BloodWorkList';
 import { BloodWorkReport } from './components/BloodWorkReport';
+import { BloodWorkView } from './components/BloodWorkView';
 
 export const routes = <Layout>
     <Route exact path='/' component={ Home } />
     <Route path='/form/:id' component={BloodWorkForm} />
     <Route path='/list' component={ BloodWorkList } />
-    <Route path='/report' component={ BloodWorkReport } />
+    <Route path='/report' component={BloodWorkReport} />
+    <Route path='/view/:id' component={BloodWorkView} />
 </Layout>;

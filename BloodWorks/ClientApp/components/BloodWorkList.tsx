@@ -48,7 +48,7 @@ export class BloodWorkList extends React.Component<RouteComponentProps<{}>, Bloo
                         <td>{Util.formatDate(bloodWork.examDate.toString())}</td>
                         <td>{bloodWork.description}</td>
                         <td>
-                            <Link to={"/form/" + bloodWork.idBloodWorks}>
+                            <Link to={"/view/" + bloodWork.idBloodWorks}>
                                 <button style={{ display: 'block', height: '100%' }}>
                                     Details
                                 </button>

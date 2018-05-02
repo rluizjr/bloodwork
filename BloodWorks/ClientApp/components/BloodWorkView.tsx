@@ -17,6 +17,7 @@ export class BloodWorkView extends React.Component<RouteComponentProps<{}>, Bloo
     public render() {
         let parameters = this.props.match.params as params;
 
+        //if the current state is loading connect to the api to get blood work information using the id passed in the route.
         if (this.state.loading) {
             fetch('api/BloodWorks/' + parameters.id)
                 .then(response => response.json() as Promise<Util.BloodWork>)
@@ -25,12 +26,14 @@ export class BloodWorkView extends React.Component<RouteComponentProps<{}>, Bloo
                 });
         }
 
+        //if it is loading show a loading message in the screen
         return this.state.loading
             ? <p><em>Loading...</em></p>
             : this.renderView();
     }
 
     renderView() {
+        //Creates the structure with labels and info to show
         let bloodWork = this.state.bloodWork;
         return <div>
             <h1>Blood Work</h1>
@@ -144,6 +147,7 @@ export class BloodWorkView extends React.Component<RouteComponentProps<{}>, Bloo
     }
 }
 
+//Interface created to identify the paramter id as part of match params
 interface params {
     id: string;
 }

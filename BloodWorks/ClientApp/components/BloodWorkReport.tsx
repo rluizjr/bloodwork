@@ -17,6 +17,7 @@ export class BloodWorkReport extends React.Component<RouteComponentProps<{}>, Bl
     }
 
     public render() {
+        //Checks if it is the first time that is rendering the page to create the div that are going to receive the charts and to get the list of bloodworks.
         if (this.state.first) {
             fetch('api/BloodWorks')
                 .then(response => response.json() as Promise<Util.BloodWork[]>)
@@ -45,6 +46,7 @@ export class BloodWorkReport extends React.Component<RouteComponentProps<{}>, Bl
             </div>;
         }
 
+        //When the informations are retrived it is going to fill the charts.
         this.FillChart("hemoglobin", "g/dL", this.state.bloodWorks.map(bloodWork => bloodWork.hemoglobin));
         this.FillChart("hematocrit", "%", this.state.bloodWorks.map(bloodWork => bloodWork.hematocrit));
         this.FillChart("white blood cell count", "cmm", this.state.bloodWorks.map(bloodWork => bloodWork.whiteBloodCellCount));
@@ -55,10 +57,12 @@ export class BloodWorkReport extends React.Component<RouteComponentProps<{}>, Bl
         this.FillChart("platelet count", "mL", this.state.bloodWorks.map(bloodWork => bloodWork.plateletCount));
     }
 
+    //Simple function to capitalize first letter of title
     CapitalizeFirstLetter(title: string) {
         return title.charAt(0).toUpperCase() + title.slice(1);
     }
 
+    //Function that uses HighCharts to create the charts and to show in the pre-created divs.
     FillChart(title: string, tooltip: string, data: number[]) {
         const capTitle = this.CapitalizeFirstLetter(title);
 
@@ -68,7 +72,7 @@ export class BloodWorkReport extends React.Component<RouteComponentProps<{}>, Bl
                 x: -20 //center
             },
             xAxis: {
-                categories: this.state.bloodWorks.map(bloodWork => Util.formatDate(bloodWork.dateCreated.toString()))
+                categories: this.state.bloodWorks.map(bloodWork => Util.formatDate(bloodWork.dateCreated.toString())) //get dates
             },
             yAxis: {
                 title: {

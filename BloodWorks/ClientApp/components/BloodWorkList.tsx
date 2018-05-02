@@ -12,7 +12,8 @@ export class BloodWorkList extends React.Component<RouteComponentProps<{}>, Bloo
     constructor() {
         super();
         this.state = { bloodWorks: [], loading: true };
-        
+
+        //Get a list of blood works to show in the list
         fetch('api/BloodWorks')
             .then(response => response.json() as Promise<Util.BloodWork[]>)
             .then(data => {
@@ -21,6 +22,7 @@ export class BloodWorkList extends React.Component<RouteComponentProps<{}>, Bloo
     }
 
     public render() {
+        //If the information is loading show loading message else it is going to render the table
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
             : BloodWorkList.renderBloodWorksTable(this.state.bloodWorks);
@@ -33,6 +35,7 @@ export class BloodWorkList extends React.Component<RouteComponentProps<{}>, Bloo
     }
 
     private static renderBloodWorksTable(bloodWorks: Util.BloodWork[]) {
+        //Function created to render the table of blood works
         return <table className='table'>
             <thead>
                 <tr>

@@ -17,6 +17,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
     }
 
     public render() {
+        //Get paramters passed in the route to check if it is a new blood work or a update.
         let parameters = this.props.match.params as params;
 
         if (this.state.loading && parameters.id != 'new') {
@@ -30,16 +31,20 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
             this.setState({ bloodWork: null, loading: false, insert: true, redirect: false });
         }
 
+        //If the action is done redirects to the list view
         if (this.state.redirect) {
             return <Redirect to='/list' />;
         }
 
+        //If information still loading it shows loading message else it is going to render the form
         return this.state.loading
             ? <p><em>Loading...</em></p>
             : this.renderForm();
     }
 
     renderForm() {
+        //Method created to render the form.
+        //Input fields default values shows empty when the user is creating a new work blood and the registered information when the user is updating info.
         let bloodWork = this.state.bloodWork;
         return <div>
             <h1>Blood Work</h1>
@@ -76,7 +81,7 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
                                 <label>Description</label>
                             </td>
                             <td>
-                                <input id='description' name='description' type='text' defaultValue={bloodWork == null ? '' : bloodWork.description.toString()} required/>
+                                <input id='description' name='description' type='text' minLength={3} maxLength={10} defaultValue={bloodWork == null ? '' : bloodWork.description.toString()} required />
                             </td>
                         </tr>
                         <tr>
@@ -152,11 +157,11 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
 
     handleSubmit(event: any) {
         event.preventDefault();
-        const form = new FormData(event.target);
-        const bloodWork = this.formToJson(form);
+        const form = new FormData(event.target); //get form data
+        const bloodWork = this.getFormInformation(form); //converts form data in a blood work object
 
-        const id = this.state.insert ? "" : bloodWork.idBloodWorks.toString();
-        const method = this.state.insert ? "POST" : "PUT";
+        const id = this.state.insert ? "" : bloodWork.idBloodWorks.toString(); // check if it is a insert or a update
+        const method = this.state.insert ? "POST" : "PUT"; //If it is a update uses PUT. if it is a insert uses POST.
 
         fetch('api/BloodWorks/' + id, {
             method: method,
@@ -170,7 +175,8 @@ export class BloodWorkForm extends React.Component<RouteComponentProps<{}>, Bloo
             });
     }
 
-    formToJson(data: FormData) {
+    //Function created to fill the information of the form in a object blood work
+    getFormInformation(data: FormData) {
         let parameters = this.props.match.params as params;
 
         let bloodWork: Util.BloodWork = {

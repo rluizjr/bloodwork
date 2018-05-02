@@ -1,4 +1,6 @@
-﻿export interface BloodWork {
+﻿//File created to hold interfaces and methods that are common to different components
+
+export interface BloodWork {
     idBloodWorks: number;
     dateCreated: Date;
     examDate: Date;

@@ -23,9 +23,7 @@ export class Home extends React.Component<RouteComponentProps<{}>, {}> {
             <h4>Comments:</h4>
             <p>
                 Even without knowing React, I decided to use react to prove that I can learn fast and use this knowledge to help to solve problems in the company. 
-                I did my best to learn React and to use it in the take-home assignment. Thanks for the opportunity to show my skills and I hope to be approved for this test.
-                
-                Thank you
+                I did my best to learn React and to use it in the take-home assignment. Thanks for the opportunity to show my skills.
             </p>
         </div>;
     }
